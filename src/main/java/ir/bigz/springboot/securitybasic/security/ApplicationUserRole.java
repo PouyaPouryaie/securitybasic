@@ -11,7 +11,7 @@ import static ir.bigz.springboot.securitybasic.security.ApplicationUserPermissio
 public enum ApplicationUserRole {
     EDITOR(Sets.newHashSet(EDITOR_READ,EDITOR_WRITE)),
     ADMIN(Sets.newHashSet(EDITOR_WRITE,EDITOR_READ,COURSE_READ,COURSE_WRITE)),
-    ADMINTRAIN(Sets.newHashSet(EDITOR_READ,COURSE_READ));
+    ADMINTRAINEE(Sets.newHashSet(EDITOR_READ,COURSE_READ));
 
     private final Set<ApplicationUserPermission> permissions;
 
