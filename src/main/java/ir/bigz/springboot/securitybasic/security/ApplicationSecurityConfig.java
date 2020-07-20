@@ -1,20 +1,17 @@
 package ir.bigz.springboot.securitybasic.security;
 
+import ir.bigz.springboot.securitybasic.auth.ApplicationUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import static ir.bigz.springboot.securitybasic.security.ApplicationUserPermission.EDITOR_WRITE;
 import static ir.bigz.springboot.securitybasic.security.ApplicationUserRole.*;
 
 @Configuration
@@ -23,10 +20,13 @@ import static ir.bigz.springboot.securitybasic.security.ApplicationUserRole.*;
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationUserService applicationUserService;
 
     @Autowired
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
+    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
+                                     ApplicationUserService applicationUserService) {
         this.passwordEncoder = passwordEncoder;
+        this.applicationUserService = applicationUserService;
     }
 
 
@@ -47,47 +47,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic();
     }
 
-
-    /**
-     * this method just for test in memory used
-     * @return UserDetails
-     */
     @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider());
+    }
+
     @Bean
-    protected UserDetailsService userDetailsService() {
-
-        //this by explicit Role
-/*        UserDetails pouya = User.builder()
-                .username("pouya")
-                .password(passwordEncoder.encode("password"))
-                .roles("ADMIN") // Role_ADMIN
-                .build();*/
-
-        //this by implicit Role
-/*        UserDetails pouya = User.builder()
-                .username("pouya")
-                .password(passwordEncoder.encode("password"))
-                .roles(ADMIN.name())
-                .build();*/
-
-        UserDetails pouya = User.builder()
-                .username("pouya")
-                .password(passwordEncoder.encode("password"))
-                .authorities(ADMIN.getGrantedAuthorities())
-                .build();
-
-        UserDetails anna = User.builder()
-                .username("anna")
-                .password(passwordEncoder.encode("password"))
-                .authorities(EDITOR.getGrantedAuthorities())
-                .build();
-
-        UserDetails tom = User.builder()
-                .username("tom")
-                .password(passwordEncoder.encode("password"))
-                .authorities(ADMINTRAINEE.getGrantedAuthorities())
-                .build();
-
-        return new InMemoryUserDetailsManager(pouya, anna,tom);
+    public DaoAuthenticationProvider daoAuthenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setUserDetailsService(applicationUserService);
+        return provider;
     }
 }
