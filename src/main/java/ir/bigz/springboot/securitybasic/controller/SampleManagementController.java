@@ -9,8 +9,9 @@ public class SampleManagementController {
 
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMINTRAINEE')")
+    @PreAuthorize("hasAnyRole('ROLE_Admin', 'ROLE_AdminTrainer')")
     public String getHome(){
+
         return "Hello Manager";
     }
 

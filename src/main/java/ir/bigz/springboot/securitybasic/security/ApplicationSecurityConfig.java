@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static ir.bigz.springboot.securitybasic.security.ApplicationUserRole.*;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -37,7 +35,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/")
                 .permitAll()
-                .antMatchers("/api/**").hasRole(ADMIN.name())
+                .antMatchers("/api/**").hasRole("Admin")
 /*                .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(EDITOR_WRITE.getPermission())
                 .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(EDITOR_WRITE.getPermission())
                 .antMatchers(HttpMethod.GET, "/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())*/

@@ -1,18 +1,22 @@
-package ir.bigz.springboot.securitybasic.auth;
+package ir.bigz.springboot.securitybasic.dao;
 
 import com.google.common.collect.Lists;
-import ir.bigz.springboot.securitybasic.security.ApplicationUserRole;
+import ir.bigz.springboot.securitybasic.auth.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-import static ir.bigz.springboot.securitybasic.security.ApplicationUserRole.*;
+import static ir.bigz.springboot.securitybasic.security.ApplicationUserRoleOld.*;
 
-@Component("fake")
-public class FakeApplicationUserDao implements ApplicationUserDao{
+//@Component("fake")
+
+/**
+ * dont User this class in practice
+ * this is for test
+ */
+public class FakeApplicationUserDao {
 
     private final PasswordEncoder passwordEncoder;
 
@@ -22,17 +26,16 @@ public class FakeApplicationUserDao implements ApplicationUserDao{
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public Optional<ApplicationUser> selectApplicationUserByUserName(String username) {
+    public Optional<UserPrincipal> selectApplicationUserByUserName(String username) {
         return getApplicationUsers().stream()
-                .filter(applicationUser -> applicationUser.getUsername().equals(username))
+                .filter(userPrincipal -> userPrincipal.getUsername().equals(username))
                 .findFirst();
     }
 
 
-    private List<ApplicationUser> getApplicationUsers() {
-        List<ApplicationUser> applicationUsers = Lists.newArrayList(
-                new ApplicationUser(
+    private List<UserPrincipal> getApplicationUsers() {
+        List<UserPrincipal> userPrincipals = Lists.newArrayList(
+                new UserPrincipal(
                         ADMIN.getGrantedAuthorities(),
                         "pouya",
                         passwordEncoder.encode("password"),
@@ -41,7 +44,7 @@ public class FakeApplicationUserDao implements ApplicationUserDao{
                         true,
                         true
                 ),
-                new ApplicationUser(
+                new UserPrincipal(
                         EDITOR.getGrantedAuthorities(),
                         "anna",
                         passwordEncoder.encode("password"),
@@ -50,7 +53,7 @@ public class FakeApplicationUserDao implements ApplicationUserDao{
                         true,
                         true
                 ),
-                new ApplicationUser(
+                new UserPrincipal(
                         ADMINTRAINEE.getGrantedAuthorities(),
                         "tom",
                         passwordEncoder.encode("password"),
@@ -61,6 +64,6 @@ public class FakeApplicationUserDao implements ApplicationUserDao{
                 )
         );
 
-        return applicationUsers;
+        return userPrincipals;
     }
 }

@@ -1,6 +1,9 @@
 package ir.bigz.springboot.securitybasic.security;
 
-public enum ApplicationUserPermission {
+/**
+ * this is not use in practice
+ */
+public enum ApplicationUserPermissionOld {
 
     EDITOR_READ("editor:read"),
     EDITOR_WRITE("editor:write"),
@@ -9,7 +12,7 @@ public enum ApplicationUserPermission {
 
     private final String permission;
 
-    ApplicationUserPermission(String permission) {
+    ApplicationUserPermissionOld(String permission) {
         this.permission = permission;
     }
 
