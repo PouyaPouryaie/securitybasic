@@ -15,4 +15,6 @@ public interface ApplicationUserService {
     boolean findUser(String userName);
 
     Optional<ApplicationUser> getApplicationUserById(long id);
+
+    String createTokenForSignUpUser(String userName);
 }
