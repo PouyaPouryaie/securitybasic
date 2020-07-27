@@ -1,6 +1,6 @@
 package ir.bigz.springboot.securitybasic.security;
 
-import ir.bigz.springboot.securitybasic.auth.ApplicationUserService;
+import ir.bigz.springboot.securitybasic.auth.UserDetailServiceImpl;
 import ir.bigz.springboot.securitybasic.jwt.JwtConfig;
 import ir.bigz.springboot.securitybasic.jwt.JwtTokenVerifier;
 import ir.bigz.springboot.securitybasic.jwt.JwtUsernameAndPasswordAuthenticationFilter;
@@ -24,17 +24,17 @@ import javax.crypto.SecretKey;
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
-    private final ApplicationUserService applicationUserService;
+    private final UserDetailServiceImpl userDetailServiceImpl;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
 
     @Autowired
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
-                                     ApplicationUserService applicationUserService,
+                                     UserDetailServiceImpl userDetailServiceImpl,
                                      SecretKey secretKey,
                                      JwtConfig jwtConfig) {
         this.passwordEncoder = passwordEncoder;
-        this.applicationUserService = applicationUserService;
+        this.userDetailServiceImpl = userDetailServiceImpl;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
     }
@@ -50,7 +50,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
                 .addFilterAfter(new JwtTokenVerifier(jwtConfig, secretKey), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/", "/ApplicationUser/**")
+                .antMatchers("/", "/ApplicationUser/api/v1/sample/signUp")
                 .permitAll()
                 .antMatchers("/api/**").hasRole("Admin")
 /*                .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(EDITOR_WRITE.getPermission())
@@ -69,7 +69,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(applicationUserService);
+        provider.setUserDetailsService(userDetailServiceImpl);
         return provider;
     }
 }

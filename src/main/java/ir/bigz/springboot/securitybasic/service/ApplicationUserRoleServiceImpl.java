@@ -4,7 +4,6 @@ import ir.bigz.springboot.securitybasic.dao.ApplicationUserRoleDao;
 import ir.bigz.springboot.securitybasic.model.ApplicationUserPermission;
 import ir.bigz.springboot.securitybasic.model.ApplicationUserRole;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.nullness.Opt;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

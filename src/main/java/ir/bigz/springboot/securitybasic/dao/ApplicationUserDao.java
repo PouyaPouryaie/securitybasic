@@ -10,7 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ApplicationUserDao extends JpaRepository<ApplicationUser, Long> {
 
-//    Optional<UserPrincipal> selectApplicationUserByUserName(String username);
-
     Optional<ApplicationUser> findApplicationUserByUserName(String userName);
 }

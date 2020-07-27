@@ -4,7 +4,6 @@ import ir.bigz.springboot.securitybasic.model.ApplicationUserPermission;
 import ir.bigz.springboot.securitybasic.model.ApplicationUserRole;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Service
