@@ -1,5 +1,6 @@
 package ir.bigz.springboot.securitybasic.controller;
 
+import ir.bigz.springboot.securitybasic.exception.ApiRequestException;
 import ir.bigz.springboot.securitybasic.model.ApplicationUser;
 import ir.bigz.springboot.securitybasic.service.ApplicationUserRoleService;
 import ir.bigz.springboot.securitybasic.service.ApplicationUserService;
@@ -27,10 +28,10 @@ public class ApplicationUserController {
         log.info("add User done");
         try {
             String tokenForSignUpUser = applicationUserService.createTokenForSignUpUser(applicationUser.getUserName());
-            return ResponseEntity.ok(tokenForSignUpUser);
+            return new ResponseEntity<>(tokenForSignUpUser, HttpStatus.CREATED);
         }catch (Exception e){
             log.error("token not created \n" + e.getMessage());
+            throw new ApiRequestException("token dose not created");
         }
-        return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
